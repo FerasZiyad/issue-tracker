@@ -1,25 +1,43 @@
 "use client";
 
-import { Button, Callout, TextFieldInput } from "@radix-ui/themes";
+import {
+  Button,
+  Callout,
+  TextFieldInput,
+  TextFieldRoot,
+  Text,
+} from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { createIssueSchema } from "@/app/api/issues/validationSchema";
+
+type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
   const router = useRouter();
-  const { register, control, handleSubmit } = useForm();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IssueForm>({ resolver: zodResolver(createIssueSchema) });
+
+  console.log({ errors });
 
   const [error, setError] = useState<string>();
   return (
     <div className="max-w-xl">
-      {error && (
+      {/* {error && (
         <Callout.Root color="red" className="mb-5">
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
-      )}
+      )} */}
       <form
         className=" space-y-3"
         onSubmit={handleSubmit(async (data) => {
@@ -27,12 +45,16 @@ const NewIssuePage = () => {
             await axios.post("/api/issues", data);
             router.push("/issues");
           } catch (error) {
-            console.log(error);
             setError("An unexpected error occurred.");
           }
         })}
       >
         <TextFieldInput placeholder="Title" {...register("title")} />
+        {errors.title && (
+          <Text className="red" as="p">
+            {errors.title.message}
+          </Text>
+        )}
         <Controller
           name="description"
           control={control}
@@ -40,6 +62,9 @@ const NewIssuePage = () => {
             <SimpleMDE placeholder="Description" {...field} />
           )}
         />
+        <Text className="red" as="p">
+          {errors.description?.message}
+        </Text>
         <Button>Submit New Issue</Button>
       </form>
     </div>
