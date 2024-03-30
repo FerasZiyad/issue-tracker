@@ -1,10 +1,14 @@
+"use client";
+
 import { Button } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const IssueActions = () => {
+  const router = useRouter();
   return (
     <div className="mb-5">
-      <Button>New Issue</Button>
+      <Button onClick={() => router.push("/issues/new")}>New Issue</Button>
     </div>
   );
 };
