@@ -1,8 +1,7 @@
 "use client";
 
 import { createIssueSchema } from "@/app/api/issues/validationSchema";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import Spinner from "@/app/components/Spinner";
+import { Spinner, ErrorMessage } from "@/app/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Callout, TextField } from "@radix-ui/themes";
 import axios from "axios";
