@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { issueFormSchema } from "../validationSchema";
 import prisma from "@/prisma/db";
+import { error } from "console";
 
 export const PATCH = async (
   request: NextRequest,
@@ -30,4 +31,25 @@ export const PATCH = async (
   });
 
   return NextResponse.json(EditedIssue, { status: 200 });
+};
+
+export const DELETE = async (
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const issue = await prisma.issue.findUnique({
+    where: { id: +params.id },
+  });
+
+  if (!issue)
+    return NextResponse.json(
+      { error: "This issue is not existed" },
+      { status: 404 }
+    );
+
+  await prisma.issue.delete({
+    where: { id: +params.id },
+  });
+
+  return NextResponse.json({ status: 200 });
 };
