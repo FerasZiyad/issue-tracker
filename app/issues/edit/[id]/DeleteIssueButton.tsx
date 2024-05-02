@@ -4,7 +4,7 @@ import { Spinner } from "@/app/components";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const DeleteIssueButton = () => {
   const issueId = useParams().id;
@@ -51,25 +51,6 @@ const DeleteIssueButton = () => {
               </Button>
             </AlertDialog.Action>
           </Flex>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
-
-      <AlertDialog.Root open={error}>
-        <AlertDialog.Content>
-          <AlertDialog.Title>Error</AlertDialog.Title>
-          <AlertDialog.Description>
-            having issue while deleting this bug
-          </AlertDialog.Description>
-          <AlertDialog.Action>
-            <Button
-              onClick={() => setError(false)}
-              mt="2"
-              color="gray"
-              variant="soft"
-            >
-              OK
-            </Button>
-          </AlertDialog.Action>
         </AlertDialog.Content>
       </AlertDialog.Root>
     </>
